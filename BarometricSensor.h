@@ -4,8 +4,8 @@
  * (Teensy 3.1)
  * Based on datasheet at http://www.meas-spec.com/downloads/MS5637-02BA03.pdf
  */
-#ifndef Morse_h //Prevents problem if library is included twice.
-#define Morse_h
+#ifndef BarometricSensor_h //Prevents problem if library is included twice.
+#define BarometricSensor_h
 
   #include "Arduino.h"
   class BarometricSensor{

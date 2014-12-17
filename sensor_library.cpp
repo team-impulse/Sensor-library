@@ -1,7 +1,9 @@
 #include "sensor_library.h"
 //must include wire library in main sketch
 
-void SENSOR_LIB::initialise(){
+SensLib::SensLib(){
+}
+void SensLib::initialise(){
   Wire.beginTransmission(ms_addr);
   Wire.write(0x1E);
   Wire.endTransmission();
@@ -22,10 +24,9 @@ void SENSOR_LIB::initialise(){
   }
 }
 
-void SENSOR_LIB::pollMS5637(){
+void SensLib::pollMS5637(){
     uint32_t d1,d2;
     //read data
-    int osr_offset = 2*((osr / 256) - 1);
     Wire.beginTransmission(ms_addr);
 
     Wire.write(0x4A);//d1 convert
@@ -85,12 +86,12 @@ void SENSOR_LIB::pollMS5637(){
     internal_temperature = temp;
 }
 
-void SENSOR_LIB::pollHYT271(){
-  byte hyt_data[4];
-  Wire.beginTransmission(hytAddr);
+void SensLib::pollHYT271(){
+  byte data[4];
+  Wire.beginTransmission(hyt_addr);
   Wire.endTransmission();//send measurement request
   delay(80);//spec 60ms.
-  Wire.requestFrom(hytAddr,4);//V Important - we don't wait for wire available,
+  Wire.requestFrom(hyt_addr,4);//V Important - we don't wait for wire available,
   //in case this causes a hang.
   for(byte i = 0;i<4;i++){
     data[i] = Wire.read();//read the expected five bytes into an array.
@@ -103,5 +104,5 @@ void SENSOR_LIB::pollHYT271(){
   int rawT = data[2] << 6;
   rawT = rawT | (data[3] >> 2);
   external_temperature = (int16_t)((((float)(rawT) * 165.0 / 16384.0) - 40.0)*100);
-  hum = (int16_t)(((float)rawH * 100.0 / 16384.0)*100);
+  humidity = (int16_t)(((float)rawH * 100.0 / 16384.0)*100);
 }
